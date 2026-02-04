@@ -1,16 +1,10 @@
 const mongoose = require("mongoose");
 const config = require("../config");
+const { logger } = require("../utils");
 
 const connectDB = async () => {
   try {
-    if (
-      config.MONGO_URI === null ||
-      config.MONGO_URI === undefined ||
-      config.MONGO_URI === "" ||
-      typeof config.MONGO_URI !== "string" ||
-      config.MONGO_URI.trim() === "" ||
-      !config.MONGO_URI
-    ) {
+    if (!config.MONGO_URI) {
       throw new Error("MONGO_URI is not defined in environment variables");
     }
     if (mongoose.connection.readyState === 0) {
@@ -18,9 +12,9 @@ const connectDB = async () => {
         // useNewUrlParser: true,
         // useUnifiedTopology: true,
       });
-      console.log("MongoDB connected");
+      logger.info("MongoDB connected");
     } else {
-      console.log("MongoDB already connected");
+      logger.info("MongoDB already connected");
     }
   } catch (error) {
     throw new Error("Failed to connect to MongoDB:" + error.message);

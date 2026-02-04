@@ -1,3 +1,7 @@
+// Refactored code for better readability and maintainability
+
 module.exports = {
-  testRouter: require("./test.route"),
+  authRouter: require("./auth.route"),
+  userRouter: require("./user.route"),
+  loggerRouter: require("./logger.route"),
 };
