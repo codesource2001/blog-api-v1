@@ -1,4 +1,7 @@
-const express = require('express');
+const express = require("express");
 const app = express();
+const routes = require("./routes");
 
-module.exports = app
+app.use("/", routes.testRouter);
+
+module.exports = app;
