@@ -1,9 +1,25 @@
 const bcrypt = require("bcryptjs");
 const { authRepository } = require("../repositories");
 const { jwt } = require("../utils");
+const { validatePassword, validateEmail } = require("../utils/security");
 
 const signup = async (data) => {
   const { email, password } = data;
+
+  // Validate email format
+  if (!validateEmail(email)) {
+    const error = new Error("Invalid email format");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  // Validate password against security policy
+  const passwordValidation = validatePassword(password);
+  if (!passwordValidation.valid) {
+    const error = new Error(passwordValidation.errors.join(". "));
+    error.statusCode = 400;
+    throw error;
+  }
 
   const existingUser = await authRepository.findByEmail(email);
   if (existingUser) {
@@ -31,6 +47,13 @@ const signup = async (data) => {
 
 const login = async (data) => {
   const { email, password } = data;
+
+  // Validate email format
+  if (!validateEmail(email)) {
+    const error = new Error("Invalid credentials");
+    error.statusCode = 401;
+    throw error;
+  }
 
   const user = await authRepository.findByEmail(email);
   if (!user) {

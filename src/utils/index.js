@@ -7,4 +7,5 @@ module.exports = {
   logger: require("./logger"),
   socket: require("./socket"),
   context: require("./context"),
+  security: require("./security"),
 };

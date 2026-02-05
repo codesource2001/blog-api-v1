@@ -8,11 +8,14 @@ const connectDB = async () => {
       throw new Error("MONGO_URI is not defined in environment variables");
     }
     if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(config.MONGO_URI, {
-        // useNewUrlParser: true,
-        // useUnifiedTopology: true,
-      });
-      logger.info("MongoDB connected");
+      await mongoose
+        .connect(config.MONGO_URI, {
+          // useNewUrlParser: true,
+          // useUnifiedTopology: true,
+        })
+        .then((data) => {
+          logger.info(`MongoDB connected with server: ${data.connection.host}`);
+        });
     } else {
       logger.info("MongoDB already connected");
     }
